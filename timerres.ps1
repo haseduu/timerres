@@ -89,7 +89,7 @@ function Enable-GlobalResolutionSupport {
             Set-ItemProperty -Path $RegistryPath -Name $ValueName -Value $ExpectedValue -Type DWord -Force
             Write-Host "Registry key applied successfully. System restart required." -ForegroundColor Green
             Start-Sleep -Seconds 2
-            shutdown /r /t 5 /c "Restarting to apply global timer configuration"
+            shutdown /r /t 3 /c "Restarting to apply global timer configuration"
             exit
         } catch {
             Write-Error "Error applying registry key. Run the script as administrator."
