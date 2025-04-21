@@ -84,16 +84,45 @@ function Enable-GlobalResolutionSupport {
     $CurrentValue = Get-ItemProperty -Path $RegistryPath -Name $ValueName -ErrorAction SilentlyContinue | Select-Object -ExpandProperty $ValueName -ErrorAction SilentlyContinue
 
     if ($CurrentValue -ne $ExpectedValue) {
-        Write-Host "`nActivating global timer resolution support..." -ForegroundColor Cyan
-        try {
-            Set-ItemProperty -Path $RegistryPath -Name $ValueName -Value $ExpectedValue -Type DWord -Force
-            Write-Host "Registry key applied successfully. System restart required." -ForegroundColor Green
-            Start-Sleep -Seconds 2
-            shutdown /r /t 3 /c "Restarting to apply global timer configuration"
-            exit
-        } catch {
-            Write-Error "Error applying registry key. Run the script as administrator."
-            exit 1
+        Write-Host "`nGlobal timer resolution support needs to be activated." -ForegroundColor Cyan
+        Write-Host "This requires a registry change and system restart." -ForegroundColor Yellow
+        Write-Host "WARNING: The timer resolution functionality will not work properly without this change." -ForegroundColor Red
+        
+        $Confirmation = Read-Host "Do you want to apply the registry change now? (y/n)"
+        
+        if ($Confirmation -match '^[yY]') {
+            try {
+                Set-ItemProperty -Path $RegistryPath -Name $ValueName -Value $ExpectedValue -Type DWord -Force
+                Write-Host "Registry key applied successfully." -ForegroundColor Green
+                
+                $RestartConfirmation = Read-Host "A system restart is required for changes to take effect. Restart now? (y/n)"
+                
+                if ($RestartConfirmation -match '^[yY]') {
+                    Write-Host "System will restart in 5 seconds..." -ForegroundColor Yellow
+                    Start-Sleep -Seconds 5
+                    shutdown /r /t 5 /c "Restarting to apply global timer configuration"
+                    exit
+                } else {
+                    Write-Host "Please restart your system manually for changes to take effect." -ForegroundColor Yellow
+                    Write-Host "WARNING: Timer resolution functions will not work properly until system restart." -ForegroundColor Red
+                    $ContinueAnyway = Read-Host "Continue with the benchmark anyway? (y/n)"
+                    if ($ContinueAnyway -notmatch '^[yY]') {
+                        Write-Host "Exiting script. Please run again after system restart." -ForegroundColor Cyan
+                        exit 0
+                    }
+                }
+            } catch {
+                Write-Error "Error applying registry key. Run the script as administrator."
+                exit 1
+            }
+        } else {
+            Write-Host "Registry change declined." -ForegroundColor Yellow
+            Write-Host "WARNING: Timer resolution functions will not work properly without this change." -ForegroundColor Red
+            $ContinueAnyway = Read-Host "Continue with the benchmark anyway? (Not recommended) (y/n)"
+            if ($ContinueAnyway -notmatch '^[yY]') {
+                Write-Host "Exiting script." -ForegroundColor Cyan
+                exit 0
+            }
         }
     }
 }
