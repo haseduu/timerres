@@ -15,7 +15,7 @@ TimerRes is a comprehensive PowerShell script for optimizing your Windows system
 
 ## Requirements
 
-- Windows 10/11
+- Windows 11
 - PowerShell 5.1 or later
 - Administrator privileges
 - Internet connection (only if executables need to be downloaded)
