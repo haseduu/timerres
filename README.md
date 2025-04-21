@@ -62,7 +62,6 @@ Parameters:
 
 ## Credits
 
-- **Script Development**: [haseduu]
 - **SetTimerResolution.exe & MeasureSleep.exe**: Developed by [Amit](https://github.com/valleyofdoom)
 
 ## License
