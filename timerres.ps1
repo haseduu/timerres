@@ -556,18 +556,18 @@ function Run-Benchmark($Parameters) {
                 $AllDeltas += $Average
                 $AllStdDevs += $StdDev
                 if ($global:Language -eq "PT-BR") {
-                    Write-Host "  Resultado da Execucao $Run - Media=$($Average)ms, DESVPAD=$($StdDev)ms" -ForegroundColor Gray
+                    Write-Host "  Resultado da Execucao $Run : Media=$($Average)ms, DESVPAD=$($StdDev)ms" -ForegroundColor Gray
                 } else {
                     Write-Host "  Run $Run Result: Avg=$($Average)ms, STDEV=$($StdDev)ms" -ForegroundColor Gray
                 }
-                            }
-                        }
+            }
+        }
 
         # Show complete progress for this resolution
         if ($global:Language -eq "PT-BR") {
-            Show-Progress ($TestCounter * 3) $TotalTests 40 "Resolucao $($CurrentResolution)ms concluida"
+            Write-Host "  Resultado da Execucao $Run - Media=$($Average)ms, DESVPAD=$($StdDev)ms" -ForegroundColor Gray
         } else {
-            Show-Progress ($TestCounter * 3) $TotalTests 40 "Resolution $($CurrentResolution)ms completed"
+            Write-Host "  Run $Run Result: Avg=$($Average)ms, STDEV=$($StdDev)ms" -ForegroundColor Gray
         }
 
         $AverageDelta = ($AllDeltas | Measure-Object -Average).Average
